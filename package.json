@@ -1,0 +1,34 @@
+{
+  "name": "md-links",
+  "version": "1.0.0",
+  "description": "## Índice",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jael91/CDMX010-md-links.git"
+  },
+  "keywords": [
+    "node",
+    "markdown"
+  ],
+  "author": "Jael91",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jael91/CDMX010-md-links/issues"
+  },
+  "homepage": "https://github.com/Jael91/CDMX010-md-links#readme",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "colors": "^1.4.0",
+    "filehound": "^1.17.4",
+    "marked": "^2.0.1",
+    "node-fetch": "^2.6.1",
+    "read-markdown": "^1.0.2"
+  }
+}
