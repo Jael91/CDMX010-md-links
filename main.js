@@ -3,7 +3,7 @@ let path = require('path');
 require('colors');
 const fetch = require('node-fetch');
 
-//  F.01 IDENTIFICAR MD E IMPRIMIRLOS
+//  F.01 IDENTIFICAR MD E IMPRIMIRLOS 
   function readFiles(files, absolutePath) {
     let links = [];
     files.forEach(archivo => { 
@@ -28,7 +28,7 @@ const fileLinks = (data) => {
   return linksCollection || []; // --> la forma más ideomática de escribir esta idea
 };
 
-//F.03 VALIDACION DE LINKS
+//F.03 VALIDACION DE LINKS -> es la única asíncrona la de la validación
 const linksValidatacion = ( links ) => {
   links.map( link => fetch( link ) // ---> estoy llamando fetch por cada link, podría usar promise.all con este array de promesas, para hacer algo cuando todas las fetch cumplen
   .then((response) => {
@@ -76,7 +76,7 @@ const totalStats = linksCollection => { // i.v. no va a trabajar con promesas, s
   let statsResult = {
     total: totalLinks,
     unique: uniqueLinks,
-    broken: brokenLinks
+    broken: brokenLinks.length
   };
   console.log(statsResult);
 };
