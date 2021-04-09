@@ -3,7 +3,7 @@ let path = require('path');
 require('colors');
 const fetch = require('node-fetch');
 
-//  IDENTIFICAR MD E IMPRIMIRLOS
+//  F.01 IDENTIFICAR MD E IMPRIMIRLOS
   function readFiles(files, absolutePath) {
     let links = [];
     files.forEach(archivo => { 
@@ -18,7 +18,7 @@ const fetch = require('node-fetch');
     return links;
   };
 
-//  OBTENER LINKS
+//  F.02 OBTENER LINKS
 const fileLinks = (data) => {
   let linksCollection = [];
   let regularExpression = /\bhttps?:\/\/\S+/gi;
@@ -28,30 +28,59 @@ const fileLinks = (data) => {
   return linksCollection || []; // --> la forma más ideomática de escribir esta idea
 };
 
-// VALIDACION DE LINKS
+//F.03 VALIDACION DE LINKS
 const linksValidatacion = ( links ) => {
   links.map( link => fetch( link ) // ---> estoy llamando fetch por cada link, podría usar promise.all con este array de promesas, para hacer algo cuando todas las fetch cumplen
   .then((response) => {
+
+    //no original 
+
+    // if (response.status === 200) {
+    //   link.status = response.status;
+    //   link.response = "O.K.";
+    // } else {
+    //   link.status = response.status;
+    //   link.response = response.statusText;
+    //   link.response = "FAIL";
+    // }
+
+    //no original
+    
       return ({ 
-      href: link, status: response.status /*? 'OK' : 'rechazado'*/});
+      href: link, status: response.status ? 'OK' : 'FAIL'});
     })
   .catch((error) =>{
     //console.log(error)
-    return { href: url, status:'rechazado' }
+    return { href: link, status:'FAIL' }
   }) 
 )};
 
-//Estadisticas de TOTAL y UNIQUES -> totalStats()
+//  F.04 Estadisticas de TOTAL y UNIQUES -> totalStats()
 const totalStats = linksCollection => { // i.v. no va a trabajar con promesas, si la de md links
-    let allLinks = linksCollection.map(link => link.href);  // async para cuando no quiero detener el flujo de ejecucion
-    const totalLinks = allLinks.length;  // la calculacion de los stats es sincrono 
-    const uniqueLinks = [...new Set(allLinks)].length; //--> solo tiene una lista de elementos unicos, hacer un bucle que va a reducir un array y compara elementos
-    let statsResult = {
-      total: totalLinks,
-      unique: uniqueLinks,
-    };
-    console.log(statsResult);
+  let allLinks = linksCollection.map(link => link.href);  // async para cuando no quiero detener el flujo de ejecucion
+  const totalLinks = allLinks.length;  // la calculacion de los stats es sincrono 
+  const uniqueLinks = [...new Set(allLinks)].length; //--> solo tiene una lista de elementos unicos, hacer un bucle que va a reducir un array y compara elementos
+  const brokenLinks = linksCollection.map(link => link.status);
+  //const statusLinks = linksCollection.map(link => link.status);
+  // const brokenLinks = linksCollection.map(link => link.status.match(/FAIL/g));
+  //console.log(brokenLinks)
+  // brokenLinks.match(/FAIL/g);
+  //return brokenLinks || [];
+  // if (brokenLinks === 0) {
+  // statsResult = {
+  // total: totalLinks,
+  // unique: uniqueLinks.length,
+  // broken: 0
+  // }
+  // .match(/FAIL/g))
+  let statsResult = {
+    total: totalLinks,
+    unique: uniqueLinks,
+    broken: brokenLinks
+  };
+  console.log(statsResult);
 };
+
 
 function main () {
   //  RUTA ABSOLUTA DE CARPETA
@@ -68,17 +97,62 @@ main()
 
 
 
+//------------------- FUNCION A DESARROLLAR ------------------------
+
+//Validar los links con sus status NUEVA FUNCION
+// const validateOption = links => {
+//     let statusLinks = links.map(link => { //  arreglo de promesas para consolidar en 1 promesa
+//       // links.map(link => {
+//       return fetch(link.href).then(response => { //  retorna una promesa
+//         if (response.status === 200) {
+//           link.status = response.status;
+//           link.response = "O.K.";
+//         } else {
+//           link.status = response.status;
+//           link.response = response.statusText;
+//           link.response = "FAIL";
+//         }
+//       });
+//     });
+//     Promise.all(statusLinks).then(response => {
+//       resolve(links);
+//     }).catch(err => {
+//       //reject(err)
+//       links.status = null;
+//       links.response = "FAIL";
+//       resolve(links);
+//     });
+//  // });
+// };
+
+// console.log(validateOption)
+
+//------------------- FUNCION A DESARROLLAR 02 ------------------------
+
+// const linksValidatacion = ( links ) => {
+//   // let linksCollection = [];
+//   let promises = links.map( item => fetch(item))
+//   //console.log(promises)
+//   //return Promise.all(promises)
+//   .then((response) => {
+//    console.log(response)
+//     // return console.log('status', { 
+//     //   href: url, status: response
+//     //   .status /*? 'OK' : 'rechazado'*/});
+//     })
+//   .catch((error) =>{
+//     console.log(error)
+//     return{ href: url, status:'rechazado' }
+//   }) 
+// };
+
+// console.log(linksValidatacion(readFiles));
 
 
 
+//------------------- NOTAS PARA ESTUDIAR ------------------------
 
 // --> md links que regresa promesa, acepta 1 path y otro es un objeto de opciones que solo tiene objeto validate. Se resuelve con un [] de links
-
-
-
-
-
-
 
 
 //  cómo llamar las funciones, bucle infinito de llamadas, la pila de llamadas, satura la app
@@ -99,24 +173,9 @@ main()
 
 
 
-// const linksValidatacion = ( links ) => {
-//   // let linksCollection = [];
-//   let promises = links.map( item => fetch(item))
-//   //console.log(promises)
-//   //return Promise.all(promises)
-//   .then((response) => {
-//    console.log(response)
-//     // return console.log('status', { 
-//     //   href: url, status: response
-//     //   .status /*? 'OK' : 'rechazado'*/});
-//     })
-//   .catch((error) =>{
-//     console.log(error)
-//     return{ href: url, status:'rechazado' }
-//   }) 
-// };
 
-// console.log(linksValidatacion(readFiles));
+
+
 
 
 
