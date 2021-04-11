@@ -7,11 +7,11 @@ const chalk = require("chalk");
 const fetch = require('node-fetch');
 
 let pathToFile = process.argv[2];
-console.log(chalk.bold.inverse.white("\n" +
-  " -------------- MD-LINKS RESULT -------------- "));
-console.log(chalk.bold.white("Choose an option: ") + chalk.white("No option | --validate or --v | --stats or --s  | --validate --stats or --v --s") + "\n");
+//console.log(chalk.bold.inverse.white("\n" +
+ // " -------------- MD-LINKS RESULT -------------- "));
+//console.log(chalk.bold.white("Choose an option: ") + chalk.white("No option | --validate or --v | --stats or --s  | --validate --stats or --v --s") + "\n");
 
-console.log(chalk.bold("FILE NAME: ") + chalk(pathToFile));
+//console.log(chalk.bold("FILE NAME: ") + chalk(pathToFile));
 
 //transforma ruta absoluta en relativa
 pathToFile = path.resolve(pathToFile);
