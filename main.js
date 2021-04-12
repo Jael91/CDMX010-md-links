@@ -31,7 +31,7 @@ const fileLinks = (data) => {
   return linksCollection || []; // --> la forma más ideomática de escribir esta idea
 };
 
-//  F.03 OBTENER LINKS
+//  F.03 VALIDAR LINKS
 const linksValidatacion = (links) => {
   let allLinks = links.map((link) => {
     fetch(link)
@@ -78,12 +78,32 @@ const totalStats = linksCollection => {
   console.log(statsResult);
 };
 
+//F.05 LINKS ROTOS
+// const totalStatsBroken = (links) => {
+//   fileLinks(links) 
+//   .then((links) => {
+//     let counterFine = [];
+//     let counterFail = [];
+// linksCollection.forEach((link) => {
+//       if(linksCollection.status == 200){
+//         counterFine.push(linksCollection.status)
+//       } else if(linksCollection.status != 200){
+//         counterFail.push(linksCollection.push)
+//       }
+//       let statsResultBroken = {
+//             broken: brokenLinks,
+//           };
+//           console.log(statsResultBroken, 'esta es la prueba');
+//     })
+//   })
+// };
+
 const options = {
   one: process.argv[2],
   two: process.argv[3]
 }
 
-//  esta es MD-LINKS
+//  f.06 esta es MD-LINKS
 function main (file, options) {
   //  RUTA ABSOLUTA DE CARPETA
   const ruteAbsolute = path.resolve(file)/*('./files')*/;
@@ -114,6 +134,8 @@ function main (file, options) {
             totalStats(links)
           } else if(option == '--stats --validate') {
             //DEBERIAN SER LOS ROTOS  como totalStats(links) pero incluyendo los rotos
+          } else if(option == '--s --v') {
+            //DEBERIAN SER LOS ROTOS  como totalStats(links) pero incluyendo los rotos
           } else 
             console.log(links);
           
@@ -121,11 +143,3 @@ function main (file, options) {
 }
 
 main('./files', options)
-
-
-
-//  CLI 
-
-// VALIDACION QUE ESTE CORRECTA
-
-//  QUE IMPRIMA TODOS LOS LINKS

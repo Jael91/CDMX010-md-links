@@ -17,23 +17,6 @@ describe('Obtener files', () => {
 
   //   ])
   })
-// });
-
-// describe('Obtener files', () => {
-//   it('debería ser una variable', () => {
-//     expect(readFiles).toBeDefined()
-//     //console.log('FIX ME!');
-//   });
-//   it('debería ser una función', () => {
-//     expect(typeof readFiles).toBe('object')
-//     //console.log('FIX ME!');
-//   });
-//   it('si retorna los links', () => {
-//     expect([
-
-//     ])
-//   })
-// });
 
 describe('Obtener links', () => {
   it('debería ser una constante', () => {
@@ -57,6 +40,26 @@ describe('Obtener links', () => {
     ]);
   })
 });
+
+
+// });
+
+// describe('Obtener files', () => {
+//   it('debería ser una variable', () => {
+//     expect(readFiles).toBeDefined()
+//     //console.log('FIX ME!');
+//   });
+//   it('debería ser una función', () => {
+//     expect(typeof readFiles).toBe('object')
+//     //console.log('FIX ME!');
+//   });
+//   it('si retorna los links', () => {
+//     expect([
+
+//     ])
+//   })
+// });
+
 
 
 // const fileLinks = (data) => {
