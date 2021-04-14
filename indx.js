@@ -85,6 +85,38 @@ const linksValidatacion = (links) => {
   // });
 };
 
+
+//console.log(linksValidatacion);
+const linksValidatacion = (links) => {
+  let allLinks = links.map((link) => {
+    fetch(link)
+      .then((response) => {
+        let validate = {
+          href: link,
+          text: "text",
+          path: "path",
+          status: response.status,
+          statusText: response.statusText,
+        };
+        console.log(validate); 
+        return validate;    
+      })
+      .catch((err) => {
+        validate = {
+          href: err.link,
+          text: "text",
+          path: "path",
+          status: response.status,
+          statusText: response.statusText,
+        };
+        //return validate;
+      });
+      //return allLinks
+  });
+  // return Promise.all(allLinks).then((newresponse) => {
+  //   return newresponse;
+  // });
+};
 //F.04 Estadisticas de TOTAL y UNIQUES -> totalStats()
 const totalStats = linksCollection => {
   // console.log(linksCollection, 'jojojojojojo');

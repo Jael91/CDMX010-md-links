@@ -198,7 +198,7 @@ const statsValidateOption = (links) => {
       //console.log("totalLinks:", totalLinks);
       uniqueLinks = [...new Set(allLinks)];
       //console.log("uniqueLinks:", uniqueLinks);
-      brokenLinks += (statusLinks.toString().match(/FAIL/g));
+      brokenLinks = (statusLinks.toString().match(/FAIL/g));
       //console.log("brokenLinks:", brokenLinks);
       let statsResult = {
         total: totalLinks,

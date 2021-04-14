@@ -120,7 +120,7 @@ usuario necesita.
 - [ ] Construir tu aplicación respetando el diseño realizado (maquetación).
 - [ ] [Uso de flexbox en CSS.](https://css-tricks.com/snipp)
 - [ ] [Uso de flexbox en CSS.](https://css-tricks.com/snippets/css/a-gui)
-- [ ] [Uso de flexbox en CSS.](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
+- [ ] [Uso de flexbox en CSS.](https://css-tricks.com/snipp)
 
 ### DOM y Web APIs
 
@@ -171,7 +171,7 @@ usuario necesita.
 
 - Este proyecto se debe resolver en duplas.
 - El proyecto será entregado subiendo tu código a GitHub (commit/push) y la
-  interfaz será desplegada usando [GitHub Pages](https://pages.github.com/).
+  interfaz será desplegada usando [GitHub Pages](https://pages.github.com/)
 - Tiempo para completarlo: Toma como referencia 4 semanas.
 
 ## 6. Checklist
