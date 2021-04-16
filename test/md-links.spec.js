@@ -1,7 +1,11 @@
 // const mdLinks = require('../');
+const arrayLinksValidated = require('./../dataProof');
 const readFiles = require('./../main');
 const fileLinks = require('./../main');
-
+const linksValidatacion = require('./../main');
+const totalStats = require('./../main');
+const statsBrokenLinks = require('./../main');
+const allLinksValidation = require('./../main');
 
 describe('Obtener files', () => {
   it('debería ser una constante', () => {
@@ -12,10 +16,6 @@ describe('Obtener files', () => {
     expect(typeof readFiles).toBe('object')
     //console.log('FIX ME!');
   });
-  // it('si retorna los links', () => {
-  //   expect([
-
-  //   ])
   })
 
 describe('Obtener links', () => {
@@ -41,40 +41,43 @@ describe('Obtener links', () => {
   })
 });
 
+it('Debe validar links', () => linksValidatacion(arrayLinksValidated).then((data) => {
+  expect(data).toEqual({ status: 200, text: 'FAIL', url: 'https://otra-cosa.net/algun-doc.html' })/*({" href:'https://jjjj', text:'text', path:'path'"})*/;
+}));
 
-// });
+describe('Obtengo esdísticas unicas y totales', () => {
+  it('debería ser una constante', () => {
+    expect(totalStats).toBe('object')
+    //console.log('FIX ME!');
+  });
+  it('muestra estadisticas', () => {
+    expect(typeof totalStats).toBe({})
+    //console.log('FIX ME!');
+  });
+})
 
-// describe('Obtener files', () => {
-//   it('debería ser una variable', () => {
-//     expect(readFiles).toBeDefined()
-//     //console.log('FIX ME!');
-//   });
-//   it('debería ser una función', () => {
-//     expect(typeof readFiles).toBe('object')
-//     //console.log('FIX ME!');
-//   });
-//   it('si retorna los links', () => {
-//     expect([
+describe('Obtengo esdísticas unicas y totales', () => {
+  it('debería ser una constante', () => {
+    expect(totalStats).toBe('object')
+    //console.log('FIX ME!');
+  });
+  it('muestra estadisticas', () => {
+    expect(typeof totalStats).toBe({})
+    //console.log('FIX ME!');
+  });
+})
 
-//     ])
-//   })
-// });
+describe('Obtengo links rotos', () => {
+  it('debería ser una constante', () => {
+    expect(statsBrokenLinks).toBe('object')
+    //console.log('FIX ME!');
+  });
+  it('muestra estadisticas de links rotos', () => {
+    expect(typeof statsBrokenLinks).toBe({})
+    //console.log('FIX ME!');
+  });
+})
 
-
-
-// const fileLinks = (data) => {
-//   let linksCollection = [];
-//   let regularExpression = /\bhttps?:\/\/\S+/gi;
-//   linksCollection = data
-//   .replace(/[{()}]/g, '')
-//   .match(regularExpression);
-//   return linksCollection || []; // --> la forma más ideomática de escribir esta idea
-// };
-
-// describe('mdLinks', () => {
-
-//   it('should...', () => {
-//     console.log('FIX ME!');
-//   });
-
-// });
+it('Debe todos validar links', () => allLinksValidation(arrayLinksValidated).then((data) => {
+  expect(data).toEqual({ status: 200, text: 'FAIL', url: 'https://otra-cosa.net/algun-doc.html' })/*({" href:'https://jjjj', text:'text', path:'path'"})*/;
+}));
