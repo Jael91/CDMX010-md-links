@@ -1,182 +1,177 @@
-let fs = require('fs');
-let path = require('path');
-require('colors');
-const fetch = require('node-fetch');
+let fs = require("fs");   //modulo de node, si quiero leer un archivo de texto que tengo en local simplemte usaré ese módulo para extraer el contenido del fichero, indicando su ruta y otra serie de parámetros que ahora describiremos. Todas las operaciones de acceso al sistema de archivos están en File System.
+let path = require("path");   //modulo de node, contiene utilidades para trabajar con rutas de ficheros
+require("colors");
+const fetch = require("node-fetch");
+const { resolve } = require("path");
+const process = require("process");
+const cliCommand = process.argv;
 
-//  IDENTIFICAR MD E IMPRIMIRLOS
-  function readFiles(files, absolutePath) {
-    let links = [];
-    //const arrayLinks = files.map(archivo => { // [[links], [links] ,  []]
-    files.forEach(archivo => { 
-      const join = path.join(absolutePath, archivo);
-      const extension = path.extname(join);
-      if ( extension === '.md' ) {
-        let data = fs.readFileSync(join, 'utf8');
-        const newLinks = fileLinks(data);
-        links = links.concat(newLinks);
-      };
-    });
-    return links;
-  };
+//  F.01 Identifica mis MD y los imprime
+function readFiles(files, absolutePath) {
+  let links = [];
+  files.forEach((archivo) => {
+    const join = path.join(absolutePath, archivo);
+    const extension = path.extname(join);
+    if (extension === ".md") {
+      let data = fs.readFileSync(join, "utf8");
+      const newLinks = fileLinks(data);
+      links = links.concat(newLinks);
+    }
+  });
+  return links;
+}
 
-//  OBTENER LINKS
+//  F.02 Obtiene mi array con TODOS los links
 const fileLinks = (data) => {
   let linksCollection = [];
   let regularExpression = /\bhttps?:\/\/\S+/gi;
-  linksCollection = data
-  .replace(/[{()}]/g, '')
-  .match(regularExpression);
+  linksCollection = data.replace(/[{()}]/g, "").match(regularExpression);
   return linksCollection || []; // --> la forma más ideomática de escribir esta idea
 };
 
-// VALIDACION DE LINKS
-const linksValidatacion = ( links ) => {
-  links.map( link => fetch( link ) // ---> estoy llamando fetch por cada link, podría usar promise.all con este array de promesas, para hacer algo cuando todas las fetch cumplen
-  .then((response) => {
-      return ({ 
-      href: link, status: response.status /*? 'OK' : 'rechazado'*/});
-    })
-  .catch((error) =>{
-    //console.log(error)
-    return { href: url, status:'rechazado' }
-  }) 
-)};
-
-//Estadisticas de TOTAL y UNIQUES -> totalStats()
-const totalStats = linksCollection => { // i.v. no va a trabajar con promesas, si la de md links
-   // ---> se podría usar reduce, pero se pierde el bucle, caunter <----
-  // let uniqueLinks = 0; mandar traer los links validados y buscar el status
-  // arreglo de link OK y otro de links rotos
-  // verificar que el status sea = a 200
-  //  hacer el fetch, contienen url y status, comparar el status de esos, si links.status ===200 empujar ese link al arreglo de broken links, .lenght. Primero como empujamos arreglos rotos u ok a cada uno de los arreglos.
-  // let okLinks = 0;
-  // let brokenLinks = 0;
-    let allLinks = linksCollection.map(link => link.href);  // async para cuando no quiero detener el flujo de ejecucion
-    const totalLinks = allLinks.length;  // la calculacion de los stats es sincrono 
-    const uniqueLinks = [...new Set(allLinks)].length; //--> solo tiene una lista de elementos unicos, hacer un bucle que va a reducir un array y compara elementos
-    let statsResult = {
-      total: totalLinks,
-      unique: uniqueLinks
-    };
-    // resolve(statsResult);
-    // tenemos que hacer una validación
-    console.log(statsResult);
-    //los links o los links con la info de status
-  // });
+//  F.03 Esta función la utilizo en mis estadísticas
+const linksValidatacion = (links) => {
+  let allLinks = links.map((link) => {
+    return fetch(link)  // hace una petición a los links // le pido el status de mis links // devuel contenido de peticion // me da el arreglo de promesas
+      .then((response) => {   //then  consumo promesa resuelta
+        let validate = {
+          href: link,
+          text: "text",
+          path: "path",
+          status: response.status,
+          statusText: response.statusText,
+        };
+        return validate;
+      })
+      .catch((err) => {   //catch consumo error de promesa
+        let validate = {
+          href: err.link,
+          text: "text",
+          path: "path",
+          status: response.status,
+          statusText: response.statusText,
+        };
+        return validate;
+      });
+    //return allLinks
+  });
+  return Promise.all(allLinks);   //  resuelve arr de promesas ok para que todas esas promesas se vayan resolviendo
+  // .then(response => statsBrokenLinks(response)) // sale pending hasta que todas se revuelvan
+  // .catch(err => console.log(err))
 };
 
-// return new Promise((resolve, reject) => { //  sobre uso de new Promise -- este es async
+//  F.04 Valida todos mis links y me retorna un arreglo de objetos con los links ya validados
+const allLinksValidation = (links) => {
+  let allLinks = links.map((link) => {
+    return fetch(link).then((response) => {
+      let validate = {
+        href: link,
+        text: "text",
+        path: "path",
+        status: response.status,
+        statusText: response.statusText,
+      };
+      console.log("----------------------------------------------------");
+      console.log("Results for your link's validation:".inverse.yellow);
+      console.log(" ");
 
-// const statsValidateOption = (links) => {
-//   return new Promise((resolve, reject) => {
-//     validateOption(links).then(link => {
-//       let allLinks = link.map(link => link.href);
-//       let statusLinks = links.map(link => link.response);
-//       //console.log("statusLinks:", statusLinks);
-//       let totalLinks = allLinks.length;
-//       //console.log("totalLinks:", totalLinks);
-//       uniqueLinks = [...new Set(allLinks)];
-//       //console.log("uniqueLinks:", uniqueLinks);
-//       brokenLinks += (statusLinks.toString().match(/FAIL/g));
-//       //console.log("brokenLinks:", brokenLinks);
-//       let statsResult = {
-//         total: totalLinks,
-//         unique: uniqueLinks.length,
-//         broken: brokenLinks.length
-//       }
-//       //console.log("STATS RESULT 2:", statsResult);
-//       if (brokenLinks === 0) {
-//         statsResult = {
-//           total: totalLinks,
-//           unique: uniqueLinks.length,
-//           broken: 0
-//         }
-//         resolve(statsResult);
-//       } else {
-//         brokenLinks = (statusLinks.toString().match(/FAIL/g)).length;
-//         let statsResult = {
-//           total: totalLinks,
-//           unique: uniqueLinks.length,
-//           broken: brokenLinks
-//         }
-//         resolve(statsResult);
-//         //console.log("STATS RESULT:", statsResult);
-//       }
-//     }).catch(err => {
-//       reject(err)
-//       console.log(chalk.bold.red("ERROR VALIDATE STATS OPTION. TRY AGAIN"));
-//     })
-//   })
-// }
+      console.log("href:", validate.href);
+      console.log("text:", validate.text);
+      console.log("path:", validate.path);
+      console.log("status:", validate.status);
+      console.log("statusText:", validate.statusText);
+      //return validate;
+    });
+  });
+};
 
-function main () {
+//  F.05 Estadísticas para links unicos y totales
+const totalStats = (linksCollection) => {
+  const totalLinks = linksCollection.length;
+  const uniqueLinks = [...new Set(linksCollection)].length;
+
+  let statsResult = {
+    total: totalLinks,
+    unique: uniqueLinks,
+  };
+
+  console.log("----------------------------------------------------");
+  console.log("Results for your link's stadistics:".inverse.cyan);
+  console.log(" ");
+  console.log("total links:", statsResult.total);
+  console.log("unique links:", statsResult.unique);
+  console.log("----------------------------------------------------");
+};
+
+//F.06 Estadisticas para LINKS ROTOS
+const statsBrokenLinks = (links) => {
+  linksValidatacion(links).then((links) => {
+    let linksBroken = [];
+    let linksOk = [];
+    //console.log(linksBroken);
+    links.forEach((link) => {
+      //console.log(link);
+      if (link.status == 200) {
+        linksOk.push(link.status);
+      } else if (link.status !== 200) {
+        linksBroken.push(link.status);
+      }
+    });
+    console.log("broken links:", linksBroken.length);
+    console.log("unbroken links:", linksOk.length);
+    console.log("----------------------------------------------------");
+  });
+  //return Promise
+};
+
+//  CLI opciones command line interface
+const options = {
+  one: process.argv[2],
+  two: process.argv[3],
+};
+
+//F.07 función madre MD-LINKS
+function main(file, options) {
   //  RUTA ABSOLUTA DE CARPETA
-  const ruteAbsolute = path.resolve('./files');
-  //console.log(ruteAbsolute.red);
-  //  VOLVER ABSOLUTO MIS LINKS y obtenerlos
-  const files = fs.readdirSync('./files');
-  //console.log(fileSync);
+  const ruteAbsolute = path.resolve(file);
+  //console.log(ruteAbsolute)
+  const files = fs.readdirSync(file); 
+  //console.log(files);
   const links = readFiles(files, ruteAbsolute);
-  //console.log(links);
 
-  linksValidatacion(links);
-  // si hay stats no imprimir links tal cual, imprimir estadisticas
-  // si hay validate, si hay stats y validate y si no hay nada 
+  const option = []; //expresion
+  if (options.two == undefined) {
+    //statement
+    option.push(options.one);
+  } else if (options.two !== undefined) {
+    option.push(options.one + " " + options.two);
+  }
 
-  totalStats(links)
+  option.forEach((option) => {
+    if (option == "--validate" || option == "--v") {
+      allLinksValidation(links);
+      //linksValidatacion(links) /*linksValidatacion(links)*/
+    } else if (option == "--stats" || option == "--s") {
+      totalStats(links);
+    } else if (
+      option == "--stats --validate" ||
+      option == "--s --v" ||
+      option == "--v --s" ||
+      option == "--validate --stats"
+    ) {
+      //caso 01
+      // totalStats(links)
+      // linksValidatacion(links)
 
-  //
+      //caso 02
+
+      totalStats(links);
+      statsBrokenLinks(links);
+    } else console.log(links);
+  });
 }
-main()
-
-// --> md links que regresa promesa, acepta 1 path y otro es un objeto de opciones que solo tiene objeto validate. Se resuelve con un [] de links
+main("./files", options);
 
 
-
-
-
-
-
-
-//  cómo llamar las funciones, bucle infinito de llamadas, la pila de llamadas, satura la app
-//  tenemos variables en la parte superior, la variable va mutando de valor, se llama condicion de carrera
-//  todavía mi variable no tiene ese valor. NO ES BUENA PRACTICA. No variables globales. 
-//  function main, leer archivo, transformar ruta absoluta, uno trás otro. 
-
-// aprovechar PARÁMETROS Y ARGUMENTOS en las funciones, pensar cuáles son nuestros parámetros
-// ejem readFiles(files)  -> nuestro código se ejecuta de forma secuencial
-// tener una función MAIN, nos da órden de qué es importante y qué se ejecuta después
-// MAP MAP MAP, entenderlo bien, la manipulación de arreglos (la meta función de la manipulación de arr)
-// forEach -> qué es lo que me está retornando, nada, undefined. 
-// diferencia entre MAP y forEach
-// cómo nos apoyamos en variables para acumular valores
-// cocat() -> cómo funciona y qué retorna
-// " || entender la TABLA DE LA VERDAD js, el operador OR "
-// hay códigos en los que no hay ninguna comparación
-
-
-
-// const linksValidatacion = ( links ) => {
-//   // let linksCollection = [];
-//   let promises = links.map( item => fetch(item))
-//   //console.log(promises)
-//   //return Promise.all(promises)
-//   .then((response) => {
-//    console.log(response)
-//     // return console.log('status', { 
-//     //   href: url, status: response
-//     //   .status /*? 'OK' : 'rechazado'*/});
-//     })
-//   .catch((error) =>{
-//     console.log(error)
-//     return{ href: url, status:'rechazado' }
-//   }) 
-// };
-
-// console.log(linksValidatacion(readFiles));
-
-
-
-
-
-
+// Node, es un entorno de código abierto y multiplataforma que me permite crear aplicaciones y herramientas del lado del servidor mediante JavaScript. ... js son más fáciles de mantener sincronizados debido a que se usa un solo lenguaje, en ambos lados de la app.
+// new define algo nevo. defines una nueva promesa, con resolve y reject

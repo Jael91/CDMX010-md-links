@@ -1,3 +1,13 @@
+# Esta es una librería para detectar los links rotos de un archivo MD
+
+***
+
+## Comandos
+
+Saca las estadísticas de tus links, únicos y totales --stats || --s
+Saca las estadísticas de tus links, únicos, totales, rotos y correctos --stats --validate
+Saca las estadísticas de todos tus links --validate || --v
+
 # Markdown Links
 
 ## Índice

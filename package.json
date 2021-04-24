@@ -30,5 +30,8 @@
     "marked": "^2.0.1",
     "node-fetch": "^2.6.1",
     "read-markdown": "^1.0.2"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3"
   }
 }
