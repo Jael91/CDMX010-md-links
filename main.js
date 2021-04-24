@@ -43,7 +43,7 @@ const linksValidatacion = (links) => {
         };
         return validate;
       })
-      .catch((err) => {   //catch consumo error de promesa
+      .catch((err) => {   //  catch consumo error de promesa
         let validate = {
           href: err.link,
           text: "text",
@@ -53,11 +53,8 @@ const linksValidatacion = (links) => {
         };
         return validate;
       });
-    //return allLinks
   });
   return Promise.all(allLinks);   //  resuelve arr de promesas ok para que todas esas promesas se vayan resolviendo
-  // .then(response => statsBrokenLinks(response)) // sale pending hasta que todas se revuelvan
-  // .catch(err => console.log(err))
 };
 
 //  F.04 Valida todos mis links y me retorna un arreglo de objetos con los links ya validados
@@ -164,14 +161,9 @@ function main(file, options) {
       // linksValidatacion(links)
 
       //caso 02
-
       totalStats(links);
       statsBrokenLinks(links);
     } else console.log(links);
   });
 }
 main("./files", options);
-
-
-// Node, es un entorno de código abierto y multiplataforma que me permite crear aplicaciones y herramientas del lado del servidor mediante JavaScript. ... js son más fáciles de mantener sincronizados debido a que se usa un solo lenguaje, en ambos lados de la app.
-// new define algo nevo. defines una nueva promesa, con resolve y reject
